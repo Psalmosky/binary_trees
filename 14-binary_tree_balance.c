@@ -1,51 +1,64 @@
-#include <stdlib.h>
 #include "binary_trees.h"
 /**
-  * binary_tree_balance - measures the balance
-  * factor of a binary tree
-  * @tree: pointer to the root node of
-  * the tree to measure the balance factor
-  * Return: if tree is NULL, return 0
-  */
+* binary_tree_balance -  measure the balance of a tree
+* @tree: root node of the tree to measure the balance
+* Return: num of nodes with a child
+*/
 int binary_tree_balance(const binary_tree_t *tree)
 {
-	int left, right;
+	int heightL = 0;
+	int heightR = 0;
 
 	if (tree == NULL)
 		return (0);
-	left = binary_tree_height(tree->left);
-	right = binary_tree_height(tree->right);
-	return (left - right);
+
+	if (tree->left)
+		heightL = binary_tree_height(tree->left) + 1;
+
+	if (tree->right)
+		heightR = binary_tree_height(tree->right) + 1;
+
+	return (heightL - heightR);
 }
+
 /**
-  * binary_tree_height - measures the height of a binary tree
-  * @tree: pointer to the root node of the tree to traverse
-  * Return: if tree is NULL return 0
-  */
+* binary_tree_height - measures the height of a binary tree
+* @tree: pointer to node root
+* Return:  measure the height.
+*/
 size_t binary_tree_height(const binary_tree_t *tree)
 {
-	size_t left_height, right_height;
-
-	if (tree == NULL || binary_tree_is_leaf(tree))
+	if (tree == NULL)
 		return (0);
 
-	left_height = binary_tree_height(tree->left);
-	right_height = binary_tree_height(tree->right);
-	if (left_height >= right_height)
-		return (left_height + 1);
-	return (right_height + 1);
+	return (maxDepth(tree) - 1);
 }
+
 /**
-  * binary_tree_is_leaf - checks if a node is a leaf
-  * @node: pointer to the node to check
-  * Return: 1 if node is a leaf, otherwise return 0
-  * if node is NULL, return 0
-  */
-int binary_tree_is_leaf(const binary_tree_t *node)
+* maxDepth - measures the height of a binary tree
+* @node: pointer to node
+* Return: measure the height.
+*/
+int maxDepth(const binary_tree_t *node)
 {
 	if (node == NULL)
+	{
 		return (0);
-	if (node->right == NULL && node->left == NULL)
-		return (1);
-	return (0);
+	}
+	else
+	{
+	/* compute the depth of each subtree */
+		int lDepth = maxDepth(node->left);
+		int rDepth = maxDepth(node->right);
+
+		/* use the larger one */
+		if (lDepth > rDepth)
+		{
+			return (lDepth + 1);
+		}
+		else
+		{
+			return (rDepth + 1);
+		}
+	}
 }
